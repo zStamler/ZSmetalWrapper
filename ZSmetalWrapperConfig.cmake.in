@@ -1,0 +1,15 @@
+# - Config file for the ZSmetalWrapper package
+# It defines the following variables
+#  ZSMETALWRAPPER_INCLUDE_DIRS - include directories for ZSmetalWrapper
+#  ZSMETALWRAPPER_LIBRARIES    - libraries to link against
+#  ZSMETALWRAPPER_EXECUTABLE   - the bar executable
+
+# Compute paths
+get_filename_component(ZSMETALWRAPPER_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(ZSMETALWRAPPER_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+include("${ZSMETALWRAPPER_CMAKE_DIR}/ZSmetalWrapperTargets.cmake")
+
+# These are IMPORTED targets created by ZSmetalWrapperTargets.cmake
+set(ZSMETALWRAPPER_LIBRARIES ZSmetalWrapper)
