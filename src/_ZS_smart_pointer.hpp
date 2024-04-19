@@ -2,19 +2,6 @@
 #define _SMART_POINTER_hpp
 
 #include <iostream>
-
-/* --------------------------- */
-#ifndef NS_PRIVATE_IMPLEMENTATION
-#define NS_PRIVATE_IMPLEMENTATION
-#endif
-
-#ifndef CA_PRIVATE_IMPLEMENTATION 
-#define CA_PRIVATE_IMPLEMENTATION
-#endif
-
-#ifndef MTL_PRIVATE_IMPLEMENTATION
-#define MTL_PRIVATE_IMPLEMENTATION
-#endif
 /* --------------------------- */
 #include <Foundation/Foundation.hpp>
 #include <Metal/Metal.hpp>
@@ -33,6 +20,8 @@ template <class T> class _ZS_smart_pointer {
         }
         T* operator->() const { return _device; }
         T& operator*() { return *_device; }
+        _ZS_smart_pointer& operator=(const _ZS_smart_pointer& orig);
+        _ZS_smart_pointer& operator=(T*&& orig) noexcept;
     protected:
         void _invisibleCopyCtor(const _ZS_smart_pointer& orig);
         void _invisibleDestructor();
@@ -42,6 +31,8 @@ template <class T> class _ZS_smart_pointer {
 
 #ifndef ZSP_INLINES
 #define ZSP_INLINES
+
+// constructors, destructors
 template <class T>
 inline _ZS_smart_pointer<T>::_ZS_smart_pointer() {
         _refCount = new size_t; *_refCount = 1;
@@ -65,6 +56,21 @@ template <class T>
 inline void _ZS_smart_pointer<T>::_invisibleDestructor() {
         --(*_refCount);
 }
+
+// operator overloads
+template <class T>
+inline _ZS_smart_pointer<T>& _ZS_smart_pointer<T>::operator=(const _ZS_smart_pointer& orig) {
+        if (this == &orig) { return *this; }
+        _invisibleCopyCtor(orig);
+        return *this;
+}
+
+template <class T>
+inline _ZS_smart_pointer<T>& _ZS_smart_pointer<T>::operator=(T*&& orig) noexcept {
+        std::swap(this->_device, orig);
+        return *this;
+}
+
 #endif
 
 }

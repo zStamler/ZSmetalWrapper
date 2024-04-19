@@ -21,14 +21,13 @@
 
 /* --------------------------- */
 #include <_ZS_smart_pointer.hpp>
-#include <ZS_metal_device_smart_pointer.hpp>
-#include <ZS_metal_command_queue_smart_pointer.hpp>
+#include <device_smart_pointer.hpp>
+#include <ZS_metal_device.hpp>
 /* --------------------------- */
 
 namespace ZS_metal_access {
 
-typedef ZS_metal_device_smart_pointer mdsp;
-typedef ZS_metal_command_queue_smart_pointer mcqsp;
+typedef ZS_metal_device md;
 
 }
 
