@@ -12,25 +12,27 @@ namespace ZS_metal_access {
 
 ZS_md_profiler::ZS_md_profiler(ZS_metal_device* dv) : _device(dv->_device) {}
 
-void ZS_md_profiler::printFeatureSetSupportCheck() {
-        std::vector<std::pair<MTL::FeatureSet, std::string>> en {
-            std::make_pair(MTL::FeatureSet::FeatureSet_macOS_GPUFamily1_v3, "FeatureSet_macOS_GPUFamily1_v3"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_macOS_GPUFamily1_v4, "FeatureSet_macOS_GPUFamily1_v4"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_macOS_GPUFamily2_v1, "FeatureSet_macOS_GPUFamily2_v1"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_watchOS_GPUFamily1_v1, "FeatureSet_watchOS_GPUFamily1_v1"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_WatchOS_GPUFamily1_v1, "FeatureSet_WatchOS_GPUFamily1_v1"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_watchOS_GPUFamily2_v1, "FeatureSet_watchOS_GPUFamily2_v1"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_WatchOS_GPUFamily2_v1, "FeatureSet_WatchOS_GPUFamily2_v1"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily1_v1, "FeatureSet_tvOS_GPUFamily1_v1"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_TVOS_GPUFamily1_v1, "FeatureSet_TVOS_GPUFamily1_v1"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily1_v2, "FeatureSet_tvOS_GPUFamily1_v2"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily1_v3, "FeatureSet_tvOS_GPUFamily1_v3"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily2_v1, "FeatureSet_tvOS_GPUFamily2_v1"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily1_v4, "FeatureSet_tvOS_GPUFamily1_v4"),
-            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily2_v2, "FeatureSet_tvOS_GPUFamily2_v2")
+void ZS_md_profiler::printArgumentBuffersTier() {
+        std::vector<std::pair<MTL::ArgumentBuffersTier, std::string>> en {
+            std::make_pair(MTL::ArgumentBuffersTier::ArgumentBuffersTier1, "ArgumentBuffersTier1"),
+            std::make_pair(MTL::ArgumentBuffersTier::ArgumentBuffersTier2, "ArgumentBuffersTier2"),
         };
         for (auto& pr : en) {
-                if (_device->supportsFeatureSet(pr.first)) {
+                if (_device->argumentBuffersSupport() == pr.first) {
+                        std::cout << pr.second << std::endl;
+                }
+        }
+}
+
+void ZS_md_profiler::printDeviceLocation() {
+        std::vector<std::pair<MTL::DeviceLocation, std::string>> en {
+            std::make_pair(MTL::DeviceLocation::DeviceLocationBuiltIn, "DeviceLocationBuiltIn"),
+            std::make_pair(MTL::DeviceLocation::DeviceLocationSlot, "DeviceLocationSlot"),
+            std::make_pair(MTL::DeviceLocation::DeviceLocationExternal, "DeviceLocationExternal"),
+            std::make_pair(MTL::DeviceLocation::DeviceLocationUnspecified, "DeviceLocationUnspecified"),
+        };
+        for (auto& pr : en) {
+                if (_device->location() == pr.first) {
                         std::cout << pr.second << std::endl;
                 }
         }
@@ -61,35 +63,77 @@ void ZS_md_profiler::printFamilySupportCheck() {
         }
 }
 
-//_MTL_ENUM(NS::UInteger, DeviceLocation) {
-//    DeviceLocationBuiltIn = 0,
-//    DeviceLocationSlot = 1,
-//    DeviceLocationExternal = 2,
-//    DeviceLocationUnspecified = NS::UIntegerMax,
-//};
-//
-//_MTL_OPTIONS(NS::UInteger, PipelineOption) {
-//    PipelineOptionNone = 0,
-//    PipelineOptionArgumentInfo = 1,
-//    PipelineOptionBufferTypeInfo = 2,
-//    PipelineOptionFailOnBinaryArchiveMiss = 4,
-//};
-//
-//_MTL_ENUM(NS::UInteger, ReadWriteTextureTier) {
-//    ReadWriteTextureTierNone = 0,
-//    ReadWriteTextureTier1 = 1,
-//    ReadWriteTextureTier2 = 2,
-//};
-//
-//_MTL_ENUM(NS::UInteger, ArgumentBuffersTier) {
-//    ArgumentBuffersTier1 = 0,
-//    ArgumentBuffersTier2 = 1,
-//};
-//
-//_MTL_ENUM(NS::UInteger, SparseTextureRegionAlignmentMode) {
-//    SparseTextureRegionAlignmentModeOutward = 0,
-//    SparseTextureRegionAlignmentModeInward = 1,
-//};
+void ZS_md_profiler::printFeatureSetSupportCheck() {
+        std::vector<std::pair<MTL::FeatureSet, std::string>> en {
+            std::make_pair(MTL::FeatureSet::FeatureSet_macOS_GPUFamily1_v3, "FeatureSet_macOS_GPUFamily1_v3"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_macOS_GPUFamily1_v4, "FeatureSet_macOS_GPUFamily1_v4"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_macOS_GPUFamily2_v1, "FeatureSet_macOS_GPUFamily2_v1"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_watchOS_GPUFamily1_v1, "FeatureSet_watchOS_GPUFamily1_v1"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_WatchOS_GPUFamily1_v1, "FeatureSet_WatchOS_GPUFamily1_v1"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_watchOS_GPUFamily2_v1, "FeatureSet_watchOS_GPUFamily2_v1"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_WatchOS_GPUFamily2_v1, "FeatureSet_WatchOS_GPUFamily2_v1"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily1_v1, "FeatureSet_tvOS_GPUFamily1_v1"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_TVOS_GPUFamily1_v1, "FeatureSet_TVOS_GPUFamily1_v1"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily1_v2, "FeatureSet_tvOS_GPUFamily1_v2"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily1_v3, "FeatureSet_tvOS_GPUFamily1_v3"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily2_v1, "FeatureSet_tvOS_GPUFamily2_v1"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily1_v4, "FeatureSet_tvOS_GPUFamily1_v4"),
+            std::make_pair(MTL::FeatureSet::FeatureSet_tvOS_GPUFamily2_v2, "FeatureSet_tvOS_GPUFamily2_v2")
+        };
+        for (auto& pr : en) {
+                if (_device->supportsFeatureSet(pr.first)) {
+                        std::cout << pr.second << std::endl;
+                }
+        }
+}
 
+void ZS_md_profiler::printPipelineOptions() {
+        std::cout << "MTL::PipelineOptionNone, " <<
+                "MTL::PipelineOptionArgumentInfo, " <<
+                "MTL::PipelineOptionBufferTypeInfo, " << 
+                "MTL::PipelineOptionFailOnBinaryArchiveMiss" << std::endl;
+}
+
+void ZS_md_profiler::printReadWriteTextureSupport() {
+        std::vector<std::pair<MTL::ReadWriteTextureTier, std::string>> en {
+            std::make_pair(MTL::ReadWriteTextureTier::ReadWriteTextureTierNone, "ReadWriteTextureTierNone"),
+            std::make_pair(MTL::ReadWriteTextureTier::ReadWriteTextureTier1, "ReadWriteTextureTier1"),
+            std::make_pair(MTL::ReadWriteTextureTier::ReadWriteTextureTier2, "ReadWriteTextureTier2")
+        };
+        for (auto& pr : en) {
+                if (_device->readWriteTextureSupport() == pr.first) {
+                        std::cout << pr.second << std::endl;
+                }
+        }
+}
+
+void ZS_md_profiler::printSparseTextureRegionAlignmentModeOptions() {
+        std::cout << "SparseTextureRegionAlignmentModeOutward, " << 
+            "SparseTextureRegionAlignmentModeInward" << std::endl;
+}
+
+void ZS_md_profiler::printLinearSize() {
+        auto size = _device->maxThreadsPerThreadgroup();
+        std::cout << size.width * size.height * size.depth << std::endl;
+}
+
+void ZS_md_profiler::printSize() {
+        auto size = _device->maxThreadsPerThreadgroup();
+        std::cout << size.width << " " << size.height << " " << size.depth << std::endl;
+}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

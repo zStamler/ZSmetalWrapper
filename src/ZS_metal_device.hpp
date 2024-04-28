@@ -18,10 +18,6 @@ class ZS_metal_device {
     public:
         ZS_metal_device();
         const device_smart_pointer& operator->() const { return _device; }
-        std::string name();
-        void printSize();
-        void printLinearSize();
-        template <typename T> const size_t maxRecommendedOfType();
         ZS_md_profiler& profiler();
         friend class ZS_md_profiler;
     private:
@@ -30,15 +26,6 @@ class ZS_metal_device {
         ZS_md_profiler _profiler;
 //        _ZS_smart_pointer<MTL::CommandBuffer> _buffer;
 };
-
-#ifndef ZSMD_INLINES
-#define ZSMD_INLINES
-template <typename T>
-inline const size_t ZS_metal_device::maxRecommendedOfType() {
-        const auto szRaw = _device->recommendedMaxWorkingSetSize();
-        return szRaw / sizeof(T);
-}
-#endif
 
 }
 
