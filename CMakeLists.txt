@@ -46,9 +46,9 @@ export(PACKAGE ZSmetalWrapper)
 
 # Create the CMake config files
 file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}" "${INSTALL_INCLUDE_DIR}/ZSmetalWrapper")
-message("${INSTALL_CMAKE_DIR}")
-message("${INSTALL_INCLUDE_DIR}")
-message("${REL_INCLUDE_DIR}")
+#message("${INSTALL_CMAKE_DIR}")
+#message("${INSTALL_INCLUDE_DIR}")
+#message("${REL_INCLUDE_DIR}")
 # .. for the build tree
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
 configure_file(ZSmetalWrapperConfig.cmake.in
@@ -59,8 +59,8 @@ set(CONF_INCLUDE_DIRS "\${ZSMETALWRAPPER_CMAKE_DIR}/${REL_INCLUDE_DIR}")
 configure_file(ZSmetalWrapperConfig.cmake.in
         "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/ZSmetalWrapperConfig.cmake" @ONLY 
 )
-message("${ZSMETALWRAPPER_CMAKE_DIR}")
-message("${CONF_INCLUDE_DIRS}")
+#message("${ZSMETALWRAPPER_CMAKE_DIR}")
+#message("${CONF_INCLUDE_DIRS}")
 # .. for both
 configure_file(ZSmetalWrapperConfigVersion.cmake.in
         "${PROJECT_BINARY_DIR}/ZSmetalWrapperConfigVersion.cmake" @ONLY 

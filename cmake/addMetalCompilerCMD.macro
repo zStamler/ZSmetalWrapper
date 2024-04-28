@@ -1,0 +1,40 @@
+macro(addIRfileCompilerCommand INPUT KRNL_SRC_PATH)
+    add_custom_command(
+        OUTPUT "${KRNL_SRC_PATH}/${INPUT}.ir"
+        COMMAND xcrun   -sdk macosx metal
+                        -o "${KRNL_SRC_PATH}/${INPUT}.ir"
+                        -c "${KRNL_SRC_PATH}/${INPUT}.metal"
+        DEPENDS "${KRNL_SRC_PATH}/${INPUT}.metal"
+        COMMENT "Compiling ${INPUT}.ir from ${INPUT}.metal"
+        VERBATIM
+    )
+    add_custom_target("${INPUT}_tgt" ALL DEPENDS "${KRNL_SRC_PATH}/${INPUT}.ir")
+endmacro(addIRfileCompilerCommand)
+
+macro(addMetalCompilerCMD INPUT_FILE KRNL_SRC_PATH OUTPUT_LIB_PATH)
+    get_filename_component(IP_NO_EXT ${INPUT_FILE} NAME_WE)
+    get_filename_component(OP_NO_EXT ${OUTPUT_LIB_PATH} NAME_WE)
+    set(IPNAME_IR "${KRNL_SRC_PATH}/${IP_NO_EXT}.ir")
+    set(IPNAME_TGT "${IP_NO_EXT}_tgt")
+    addIRfileCompilerCommand(${IP_NO_EXT} ${KRNL_SRC_PATH})
+    add_custom_command(
+        OUTPUT ${OUTPUT_LIB_PATH}.metallib
+        COMMAND xcrun   -sdk macosx metallib
+                        -o ${OUTPUT_LIB_PATH}.metallib
+                        "${IPNAME_IR}"
+        DEPENDS "${IPNAME_TGT}"
+        COMMENT "Compiling ${OP_NO_EXT}.metallib from ${IPNAME_IR}"
+        VERBATIM
+    )
+    add_custom_target(kernels_tgt ALL DEPENDS ${KRNL_LIB_NAME}.metallib)    
+endmacro(addMetalCompilerCMD)
+
+macro(buildKernels KRNL_SRC_PATH OP_LIB_DIR)
+    FILE(GLOB KernelSources ${KRNL_SRC_PATH}/*.metal)
+    foreach(KSRC ${KernelSources})
+        message(STATUS "Added kernel source file ${KSRC}")
+        get_filename_component(KN_NO_EXT ${KSRC} NAME_WE)
+        set(KRNL_LIB_NAME ${OP_LIB_DIR}/${KN_NO_EXT})
+        addMetalCompilerCMD("${KSRC}" ${KRNL_SRC_PATH} ${KRNL_LIB_NAME})
+    endforeach()
+endmacro(buildKernels)

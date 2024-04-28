@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.13)
 cmake_policy(VERSION 3.13..3.29)
 
-include(addOSXframework.macro)
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+set(CMAKE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/cmake)
+file(GLOB MACROS ${CMAKE_INCLUDE_DIR}/*.macros)
+foreach(MC ${MACROS})
+        message(STATUS "Including macro ${MC}")
+        include(${MC})
+endforeach()
 
 configure_file(config.hpp.in "${CMAKE_CURRENT_BINARY_DIR}/config.hpp" @ONLY)
 
@@ -23,8 +29,8 @@ target_include_directories(ZSmetalWrapper PRIVATE
         ${PROJECT_SOURCE_DIR}/src
 )
 
-ADD_OSX_FRAMEWORK(Metal ZSmetalWrapper)
-ADD_OSX_FRAMEWORK(Foundation ZSmetalWrapper)
+add_osx_framework(Metal ZSmetalWrapper)
+add_osx_framework(Foundation ZSmetalWrapper)
 
 target_compile_features(ZSmetalWrapper PUBLIC cxx_std_17)
 
