@@ -9,6 +9,7 @@
 /* --------------------------- */
 #include <_ZS_smart_pointer.hpp>
 #include <device_smart_pointer.hpp>
+#include <ZS_md_profiler.hpp>
 /* --------------------------- */
 
 namespace ZS_metal_access {
@@ -21,10 +22,13 @@ class ZS_metal_device {
         void printSize();
         void printLinearSize();
         template <typename T> const size_t maxRecommendedOfType();
+        ZS_md_profiler& profiler();
+        friend class ZS_md_profiler;
     private:
         device_smart_pointer _device;
         _ZS_smart_pointer<MTL::CommandQueue> _queue;
-        _ZS_smart_pointer<MTL::CommandBuffer> _buffer;
+        ZS_md_profiler _profiler;
+//        _ZS_smart_pointer<MTL::CommandBuffer> _buffer;
 };
 
 #ifndef ZSMD_INLINES
